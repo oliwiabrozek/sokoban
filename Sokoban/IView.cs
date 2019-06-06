@@ -10,7 +10,13 @@ namespace Sokoban
 	public interface IView
 	{
 		List<List<char>> Map { set; }
+		//System.Windows.Forms.Keys Key { set; }
 
-		event Action LoadingMap;
+		event Action LoadMap;
+		event Action MovePlayerUp;
+		event Action MovePlayerLeft;
+		event Action MovePlayerRight;
+		event Action MovePlayerDown;
+		//event Action DrawMap;
 	}
 }
