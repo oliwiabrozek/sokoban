@@ -17,9 +17,9 @@ namespace Sokoban
 
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Model model = new Model();
+			GameEngine gameEngine = new GameEngine();
 			IView view = new GameForm();
-			Presenter presenter = new Presenter(model, view);
+			Presenter presenter = new Presenter(gameEngine, view);
 
 			Application.Run((Form)view);
 		}

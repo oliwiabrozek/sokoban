@@ -21,7 +21,7 @@ namespace Sokoban
 			g = CreateGraphics();
 		}
 
-		public List<List<char>> Map
+		public Map SetMap
 		{
 			set
 			{
@@ -35,11 +35,11 @@ namespace Sokoban
 		public event Action MovePlayerLeft;
 		public event Action MovePlayerRight;
 
-		private void DrawMap(List<List<char>> map)
+		private void DrawMap(Map map)
 		{
 			int i = -1;
 			int j = -1;
-			foreach(List<char> line in map)
+			foreach(List<char> line in map.MapProperties)
 			{
 				j++;
 				foreach (char c in line)
@@ -81,7 +81,6 @@ namespace Sokoban
 			{
 				case Keys.Up:
 					MovePlayerUp();
-					
 					break;
 				case Keys.Down:
 					MovePlayerDown();

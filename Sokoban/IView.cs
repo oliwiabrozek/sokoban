@@ -9,7 +9,8 @@ namespace Sokoban
 {
 	public interface IView
 	{
-		List<List<char>> Map { set; }
+		Map SetMap { set; }
+		
 		//System.Windows.Forms.Keys Key { set; }
 
 		event Action LoadMap;

@@ -56,7 +56,8 @@
       <DependentUpon>GameForm.cs</DependentUpon>
     </Compile>
     <Compile Include="IView.cs" />
-    <Compile Include="Model.cs" />
+    <Compile Include="Model\Map.cs" />
+    <Compile Include="Model\GameEngine.cs" />
     <Compile Include="Presenter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

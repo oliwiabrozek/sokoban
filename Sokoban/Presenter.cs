@@ -8,12 +8,12 @@ namespace Sokoban
 {
 	class Presenter
 	{
-		Model model;
+		GameEngine gameEngine;
 		IView view;
 
-		public Presenter(Model model, IView view)
+		public Presenter(GameEngine gameEngine, IView view)
 		{
-			this.model = model;
+			this.gameEngine = gameEngine;
 			this.view = view;
 			this.view.LoadMap += LoadMap;
 			this.view.MovePlayerUp += MovePlayerUp;
@@ -24,27 +24,31 @@ namespace Sokoban
 
 		private void LoadMap()
 		{
-			view.Map = model.LoadMapFromFile();
+			view.SetMap = gameEngine.GetMap();
 		}
 
 		private void MovePlayerUp()
 		{
-			view.Map = model.MovePlayerUp();
+			gameEngine.MovePlayerUp();
+			view.SetMap = gameEngine.GetMap();
 		}
 
 		private void MovePlayerDown()
 		{
-			model.MovePlayerDown();
+			gameEngine.MovePlayerDown();
+			view.SetMap = gameEngine.GetMap();
 		}
 
 		private void MovePlayerLeft()
 		{
-			model.MovePlayerLeft();
+			gameEngine.MovePlayerLeft();
+			view.SetMap = gameEngine.GetMap();
 		}
 
 		private void MovePlayerRight()
 		{
-			model.MovePlayerRight();
+			gameEngine.MovePlayerRight();
+			view.SetMap = gameEngine.GetMap();
 		}
 	}
 }
