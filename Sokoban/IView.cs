@@ -11,13 +11,10 @@ namespace Sokoban
 	{
 		Map SetMap { set; }
 		
-		//System.Windows.Forms.Keys Key { set; }
-
 		event Action LoadMap;
 		event Action MovePlayerUp;
 		event Action MovePlayerLeft;
 		event Action MovePlayerRight;
 		event Action MovePlayerDown;
-		//event Action DrawMap;
 	}
 }

@@ -73,6 +73,16 @@ namespace Sokoban.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap destination {
+            get {
+                object obj = ResourceManager.GetObject("destination", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ground {
             get {
                 object obj = ResourceManager.GetObject("ground", resourceCulture);

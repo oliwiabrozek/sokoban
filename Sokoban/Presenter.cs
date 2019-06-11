@@ -25,6 +25,7 @@ namespace Sokoban
 		private void LoadMap()
 		{
 			view.SetMap = gameEngine.GetMap();
+			
 		}
 
 		private void MovePlayerUp()

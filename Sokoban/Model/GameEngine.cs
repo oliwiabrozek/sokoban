@@ -11,8 +11,8 @@ using System.Collections;
 namespace Sokoban
 {
 	public class GameEngine
-	{
-		Map map;
+	{ 
+		private Map map;
 
 		public GameEngine()
 		{
@@ -24,6 +24,7 @@ namespace Sokoban
 		{
 			return map;
 		}
+
 		public void MovePlayerUp()
 		{
 			map.updateMap("Up");

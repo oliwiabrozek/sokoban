@@ -17,10 +17,13 @@ namespace Sokoban
 		private Point boxXY;
 		private Point boxNewXY;
 		private List<Point> boxesXY;
+		private Point destinationXY;
+		private List<Point> destinationsXY;
 		private bool playerMoveAllowed = true;
-		//private bool boxMoveAllowed = true;
-		private int x = 0; //rows
-		private int y = 0; //columns
+		private bool boxMoveAllowed = false;
+		private int x; //rows
+		private int y; //columns
+		private int movesCounter = 0;
 
 		public Map()
 		{
@@ -29,12 +32,32 @@ namespace Sokoban
 			boxXY = new Point();
 			boxNewXY = new Point();
 			boxesXY = new List<Point>();
+			destinationXY = new Point();
+			destinationsXY = new List<Point>();
 		}
 
 		public List<List<char>> MapProperties
 		{
 			get { return map; }
 			set { map = value; }
+		}
+		
+		public int MovesCounter
+		{
+			get { return movesCounter; }
+		}
+
+		public bool checkIfBoxesDelivered()
+		{
+			for (int i = 0; i < destinationsXY.Count; i++)
+			{
+				destinationXY.X = destinationsXY[i].X;
+				destinationXY.Y = destinationsXY[i].Y;
+
+				if (map[destinationXY.X][destinationXY.Y] != '*')
+					return false;
+			}
+			return true;
 		}
 
 		public List<List<char>> LoadMapFromFile()
@@ -59,6 +82,10 @@ namespace Sokoban
 					{
 						boxesXY.Add(new Point(x, y));
 					}
+					else if(c == '.')
+					{
+						destinationsXY.Add(new Point(x, y));
+					}
 					y++; //kolumn
 				}
 				y = 0;
@@ -75,41 +102,105 @@ namespace Sokoban
 					playerNewXY.X -= 1;
 					if (map[playerNewXY.X][playerNewXY.Y] == 'X')
 						playerMoveAllowed = false;
+					else if (map[playerNewXY.X][playerNewXY.Y] == '*')
+					{
+						boxXY.X = playerNewXY.X;
+						boxXY.Y = playerNewXY.Y;
+
+						int ind = boxesXY.IndexOf(boxXY);
+
+						boxNewXY.X = boxXY.X - 1;
+						boxNewXY.Y = boxXY.Y;
+
+						if (map[boxNewXY.X][boxNewXY.Y] == 'X' || map[boxNewXY.X][boxNewXY.Y] == '*')
+							playerMoveAllowed = false;
+						else
+						{
+							boxMoveAllowed = true;
+							boxXY.X = boxNewXY.X;
+							boxXY.Y = boxNewXY.Y;
+							boxesXY[ind] = boxXY;
+						}
+
+					}
 					break;
 				case "Down":
 					playerNewXY.X += 1;
 					if (map[playerNewXY.X][playerNewXY.Y] == 'X')
 						playerMoveAllowed = false;
+					else if (map[playerNewXY.X][playerNewXY.Y] == '*')
+					{
+						boxXY.X = playerNewXY.X;
+						boxXY.Y = playerNewXY.Y;
+
+						int ind = boxesXY.IndexOf(boxXY);
+
+						boxNewXY.X = boxXY.X + 1;
+						boxNewXY.Y = boxXY.Y;
+
+						if (map[boxNewXY.X][boxNewXY.Y] == 'X' || map[boxNewXY.X][boxNewXY.Y] == '*')
+							playerMoveAllowed = false;
+						else
+						{
+							boxMoveAllowed = true;
+							boxXY.X = boxNewXY.X;
+							boxXY.Y = boxNewXY.Y;
+							boxesXY[ind] = boxXY;
+						}
+
+					}
 					break;
 				case "Right":
 					playerNewXY.Y += 1;
 					if (map[playerNewXY.X][playerNewXY.Y] == 'X')
 						playerMoveAllowed = false;
+					else if (map[playerNewXY.X][playerNewXY.Y] == '*')
+					{
+						boxXY.X = playerNewXY.X;
+						boxXY.Y = playerNewXY.Y;
+
+						int ind = boxesXY.IndexOf(boxXY);
+
+						boxNewXY.X = boxXY.X;
+						boxNewXY.Y = boxXY.Y + 1;
+
+						if (map[boxNewXY.X][boxNewXY.Y] == 'X' || map[boxNewXY.X][boxNewXY.Y] == '*')
+							playerMoveAllowed = false;
+						else
+						{
+							boxMoveAllowed = true;
+							boxXY.X = boxNewXY.X;
+							boxXY.Y = boxNewXY.Y;
+							boxesXY[ind] = boxXY;
+						}
+
+					}
 					break;
 				case "Left":
 					playerNewXY.Y -= 1;
 					if (map[playerNewXY.X][playerNewXY.Y] == 'X')
 						playerMoveAllowed = false;
-					//else if (map[playerNewXY.X][playerNewXY.Y] == '*')
-					//{
-					//	boxXY.X = playerNewXY.X;
-					//	boxXY.Y = playerNewXY.Y;
+					else if (map[playerNewXY.X][playerNewXY.Y] == '*')
+					{
+						boxXY.X = playerNewXY.X;
+						boxXY.Y = playerNewXY.Y;
 
-					//	int ind = boxesXY.IndexOf(boxXY);
+						int ind = boxesXY.IndexOf(boxXY);
 
-					//	boxNewXY.X += boxXY.X;
-					//	boxNewXY.Y = boxXY.X - 1;
+						boxNewXY.X = boxXY.X;
+						boxNewXY.Y = boxXY.Y - 1;
 
-					//	if (map[boxNewXY.X][boxNewXY.Y] == 'X')
-					//		playerMoveAllowed = false;
-					//	else
-					//	{
-					//		boxXY.X = boxNewXY.X;
-					//		boxXY.Y = boxNewXY.Y;
-					//		boxesXY[ind] = boxXY;
-					//	}
+						if (map[boxNewXY.X][boxNewXY.Y] == 'X' || map[boxNewXY.X][boxNewXY.Y] == '*')
+							playerMoveAllowed = false;
+						else
+						{
+							boxMoveAllowed = true;
+							boxXY.X = boxNewXY.X;
+							boxXY.Y = boxNewXY.Y;
+							boxesXY[ind] = boxXY;
+						}
 
-					//}
+					}
 					break;
 			}
 			
@@ -120,10 +211,22 @@ namespace Sokoban
 			changeplayerXYCoordinates(direction);
 			if (playerMoveAllowed == true)
 			{
-				map[playerXY.X][playerXY.Y] = ' ';
+				movesCounter++;
+				if (boxMoveAllowed)
+				{
+					//map[playerNewXY.X][playerNewXY.Y] = ' ';
+					map[boxNewXY.X][boxNewXY.Y] = '*';
+					boxMoveAllowed = false;
+				}
+
+				if (destinationsXY.Contains(playerXY))
+					map[playerXY.X][playerXY.Y] = '.';
+				else
+					map[playerXY.X][playerXY.Y] = ' ';
 				map[playerNewXY.X][playerNewXY.Y] = '@';
 				playerXY.X = playerNewXY.X;
 				playerXY.Y = playerNewXY.Y;
+				
 			}
 			else
 			{

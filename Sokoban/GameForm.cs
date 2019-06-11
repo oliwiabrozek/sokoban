@@ -8,17 +8,49 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using System.Timers;
 
 namespace Sokoban
 {
 	public partial class GameForm : Form, IView
 	{
 		private Graphics g;
-
+		private int width;
+		private int tempWidth;
+		private int height;
+		private System.Timers.Timer timer;
+		private int h, m, s;
+		
 		public GameForm()
 		{
 			InitializeComponent();
-			g = CreateGraphics();
+			//g = CreateGraphics();
+			//panel1.CreateGraphics();
+			timer = new System.Timers.Timer();
+			
+			
+
+		}
+
+		private void OnTimeEvent(object sender, ElapsedEventArgs e)
+		{
+			//throw new NotImplementedException();
+			Invoke (new Action(() =>
+			{
+				s += 1;
+				if (s == 60)
+				{
+					s = 0;
+					m += 1;
+				}
+				if(m==60)
+				{
+					m = 0;
+					h += 1;
+				}
+				label2.Text = String.Format("Time: {0}:{1}:{2}", h.ToString().PadLeft(2,'0'),
+					m.ToString().PadLeft(2, '0'), s.ToString().PadLeft(2, '0'));
+			}));
 		}
 
 		public Map SetMap
@@ -37,42 +69,68 @@ namespace Sokoban
 
 		private void DrawMap(Map map)
 		{
-			int i = -1;
-			int j = -1;
+			width = 0;
+			height = 0;
+			
 			foreach(List<char> line in map.MapProperties)
-			{
-				j++;
+			{ 
 				foreach (char c in line)
 				{
-					i++;
+					
 					switch (c)
 					{
 						case 'X':
-							g.DrawImage(Properties.Resources.wall, i * 32, j * 32);
+
+							g.DrawImage(Properties.Resources.wall, width * 32, height * 32);
 							break;
 						case '@':
-							g.DrawImage(Properties.Resources.player, i * 32, j * 32);
+							g.DrawImage(Properties.Resources.player, width * 32, height * 32);
 							break;
 						case '*':
-							g.DrawImage(Properties.Resources.box, i * 32, j * 32);
+							g.DrawImage(Properties.Resources.box, width * 32, height * 32);
 							break;
 						case ' ':
-							g.DrawImage(Properties.Resources.ground, i * 32, j * 32);
+							g.DrawImage(Properties.Resources.ground, width * 32, height * 32);
 							break;
 						case '.':
-							g.DrawImage(Properties.Resources.ground, i * 32, j * 32);
+							g.DrawImage(Properties.Resources.destination, width * 32, height * 32);
 							break;
 					}
+					width++;
 				}
-				i = -1;
+				height++;
+				tempWidth = width;
+				width = 0;
+			}
+
+			panel1.Width = tempWidth * 32;
+			panel1.Height = height * 32;
+
+			label1.Text = "Moves: " + map.MovesCounter;
+
+			if (map.checkIfBoxesDelivered()==true)
+			{
+				MessageBox.Show("Wygrałeś!!!");
+				timer.Stop();
 			}
 
 		}
 
 
+
 		private void GameForm_Load(object sender, EventArgs e)
 		{
-			LoadMap();
+			//LoadMap();
+			timer.Interval = 1000;
+			timer.Start();
+			timer.Elapsed += OnTimeEvent;
+
+		}
+
+		private void GameForm_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			timer.Stop();
+			Application.DoEvents();
 		}
 
 		private void GameForm_KeyDown(object sender, KeyEventArgs e)
@@ -92,6 +150,14 @@ namespace Sokoban
 					MovePlayerRight();
 					break;
 			}
+		}
+
+		private void panel1_Paint(object sender, PaintEventArgs e)
+		{
+			g = panel1.CreateGraphics();
+			//g = CreateGraphics();
+			LoadMap();
+			
 		}
 	}
 }
