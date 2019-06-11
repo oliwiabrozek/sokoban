@@ -16,6 +16,7 @@ namespace Sokoban
 			this.gameEngine = gameEngine;
 			this.view = view;
 			this.view.LoadMap += LoadMap;
+			this.view.ResetMap += ResetMap;
 			this.view.MovePlayerUp += MovePlayerUp;
 			this.view.MovePlayerLeft += MovePlayerLeft;
 			this.view.MovePlayerRight += MovePlayerRight;
@@ -26,6 +27,10 @@ namespace Sokoban
 		{
 			view.SetMap = gameEngine.GetMap();
 			
+		}
+		private void ResetMap()
+		{
+			gameEngine = new GameEngine();
 		}
 
 		private void MovePlayerUp()

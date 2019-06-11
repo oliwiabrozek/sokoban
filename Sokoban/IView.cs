@@ -12,6 +12,7 @@ namespace Sokoban
 		Map SetMap { set; }
 		
 		event Action LoadMap;
+		event Action ResetMap;
 		event Action MovePlayerUp;
 		event Action MovePlayerLeft;
 		event Action MovePlayerRight;

@@ -15,6 +15,7 @@ namespace Sokoban
 	public partial class GameForm : Form, IView
 	{
 		private Graphics g;
+		private Bitmap currentPlayerBitmap = Properties.Resources.player_down;
 		private int width;
 		private int tempWidth;
 		private int height;
@@ -24,13 +25,11 @@ namespace Sokoban
 		public GameForm()
 		{
 			InitializeComponent();
-			//g = CreateGraphics();
-			//panel1.CreateGraphics();
+			//KeyDown += new KeyEventHandler(GameForm_KeyDown);
 			timer = new System.Timers.Timer();
-			
-			
-
 		}
+
+		
 
 		private void OnTimeEvent(object sender, ElapsedEventArgs e)
 		{
@@ -66,6 +65,7 @@ namespace Sokoban
 		public event Action MovePlayerDown;
 		public event Action MovePlayerLeft;
 		public event Action MovePlayerRight;
+		public event Action ResetMap;
 
 		private void DrawMap(Map map)
 		{
@@ -84,7 +84,9 @@ namespace Sokoban
 							g.DrawImage(Properties.Resources.wall, width * 32, height * 32);
 							break;
 						case '@':
-							g.DrawImage(Properties.Resources.player, width * 32, height * 32);
+							currentPlayerBitmap.MakeTransparent(Color.Transparent);
+							g.DrawImage(Properties.Resources.ground, width * 32, height * 32);
+							g.DrawImage(currentPlayerBitmap, width * 32, height * 32);
 							break;
 						case '*':
 							g.DrawImage(Properties.Resources.box, width * 32, height * 32);
@@ -112,6 +114,8 @@ namespace Sokoban
 			{
 				MessageBox.Show("Wygrałeś!!!");
 				timer.Stop();
+				ResetMap();
+				LoadMap();
 			}
 
 		}
@@ -135,7 +139,9 @@ namespace Sokoban
 
 		private void GameForm_KeyDown(object sender, KeyEventArgs e)
 		{
-			switch(e.KeyCode)
+			MessageBox.Show("");
+
+			switch (e.KeyCode)
 			{
 				case Keys.Up:
 					MovePlayerUp();
@@ -150,6 +156,36 @@ namespace Sokoban
 					MovePlayerRight();
 					break;
 			}
+		}
+
+		private void button1_Click(object sender, EventArgs e)
+		{
+			ResetMap();
+			LoadMap();
+		}
+
+		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+		{
+			switch (keyData)
+			{
+				case Keys.Up:
+					currentPlayerBitmap = Properties.Resources.player_up;
+					MovePlayerUp();
+					break;
+				case Keys.Down:
+					currentPlayerBitmap = Properties.Resources.player_down;
+					MovePlayerDown();
+					break;
+				case Keys.Left:
+					currentPlayerBitmap = Properties.Resources.player_left;
+					MovePlayerLeft();
+					break;
+				case Keys.Right:
+					currentPlayerBitmap = Properties.Resources.player_right;
+					MovePlayerRight();
+					break;
+			}
+			return base.ProcessCmdKey(ref msg, keyData);
 		}
 
 		private void panel1_Paint(object sender, PaintEventArgs e)
